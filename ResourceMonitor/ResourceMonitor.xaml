@@ -1,0 +1,128 @@
+﻿<Window x:Class="ResourceMonitorVT.ResourceMonitor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ResourceMonitorVT"
+        mc:Ignorable="d"
+        Title="Resourse Monitor by VT" Height="450" Width="650">
+    <Window.Resources>
+
+    </Window.Resources>
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*"></RowDefinition>
+                <RowDefinition Height="65*"></RowDefinition>
+                <RowDefinition Height="20*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Content="Имя сервера:" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBox Grid.Row="1" x:Name="txtServer" MaxLength="20" Margin="5" TextAlignment="Center"
+                         VerticalContentAlignment="Center" CharacterCasing="Upper" />
+            </Grid>
+
+            <!--<StackPanel Margin="3">
+                <Label Content="Имя сервера:" />
+                <TextBox x:Name="txtServer" MaxLength="20"></TextBox>
+            </StackPanel>-->
+
+            <Button Name="btnConnect" Margin="3, 5" Grid.Row="0" Grid.Column="1">Соединиться</Button>
+
+            <Grid Grid.Row="0" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <DockPanel Margin="3" LastChildFill="True">
+                    <Label Content="Шаблон:" VerticalAlignment="Center"></Label>
+                    <TextBox x:Name="txtTemplate" Text="{Binding Template, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                             VerticalContentAlignment="Center"                             >
+                    </TextBox>
+                </DockPanel>
+                <ComboBox Name="cbProcesses" Grid.Row="1" Margin="5"
+                          ItemsSource="{Binding AllProcesses}"
+                          DisplayMemberPath="ProcessName">
+                </ComboBox>
+            </Grid>
+
+
+            <ListView Name="lvCommon" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Margin="3"
+                      ItemsSource="{Binding ProcessesCounts}">
+                <!--<ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>-->
+                <ListView.View>
+                    <GridView x:Name="gvCommon">
+                        <GridView.Columns>
+                            <GridViewColumn Header="Процесс" DisplayMemberBinding="{Binding ProcessName}" />
+                            <GridViewColumn Header="Memory (MB)" DisplayMemberBinding="{Binding RamUsage}" />
+                            <GridViewColumn Header="CPU Usage, %" DisplayMemberBinding="{Binding CpuUsage}" />
+                            <GridViewColumn Header="Page Faults/sec" DisplayMemberBinding="{Binding FaultsUsage}" />
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MoreValid}" Value="true">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">% CPU Usage</TextBlock>
+                <TextBox Name="tbCpuTotal" Grid.Row="0" Grid.Column="1" Margin="3"
+                         IsReadOnly="True" VerticalContentAlignment="Center"
+                         Text="{Binding ValueCpu}">
+                </TextBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">% Usage Physical Memory</TextBlock>
+                <TextBox Name="tbMemoryTotal" Grid.Row="1" Grid.Column="1" Margin="3"
+                         IsReadOnly="True" VerticalContentAlignment="Center"
+                         Text="{Binding ValueMemory}">
+                </TextBox>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">KB/Sec Disk I/O</TextBlock>
+                <TextBox Name="tbDiskTotal" Grid.Row="2" Grid.Column="1" Margin="3"
+                         IsReadOnly="True" VerticalContentAlignment="Center"
+                         Text="{Binding ValueDisk}">
+                </TextBox>
+            </Grid>
+
+            <Grid Grid.Row="2" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Button Name="btnDelProcess" Grid.Row="0" Margin="3">Удалить процесс</Button>
+                <Button Name="btnSave" Grid.Row="1" Margin="3">Сохранять в новый файл</Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
